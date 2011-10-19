@@ -1,10 +1,10 @@
 <?php
 
 /**
- * DMZ firewall add domain view.
+ * DMZ firewall forwarding add view.
  *
  * @category   ClearOS
- * @package    Incoming_Firewall
+ * @package    Dmz
  * @subpackage Views
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
@@ -41,10 +41,13 @@ $this->lang->load('firewall');
 ///////////////////////////////////////////////////////////////////////////////
 
 echo form_open('dmz/incoming/add');
-echo form_header(lang('firewall_host'));
+echo form_header(lang('dmz_incoming_connection'));
 
 echo field_input('nickname', $nickname, lang('firewall_nickname'));
-echo field_input('host', $host, lang('firewall_host'));
+echo field_input('ip_address', $ip_address, lang('firewall_ip_address'));
+echo field_checkbox('all', $all, lang('dmz_all_protocols_and_ports'));
+echo field_simple_dropdown('protocol', $protocols, $protocol, lang('firewall_protocol'));
+echo field_input('port', $port, lang('firewall_port'));
 
 echo field_button_set(
     array(

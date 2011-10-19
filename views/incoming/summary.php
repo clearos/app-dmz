@@ -29,6 +29,8 @@
 //  
 ///////////////////////////////////////////////////////////////////////////////
 
+use \clearos\apps\firewall\Firewall as Firewall;
+
 ///////////////////////////////////////////////////////////////////////////////
 // Load dependencies
 ///////////////////////////////////////////////////////////////////////////////
@@ -58,10 +60,10 @@ $anchors = array(anchor_add('/app/dmz/incoming/add'));
 // Items
 ///////////////////////////////////////////////////////////////////////////////
 
-foreach ($hosts as $rule) {
-    $key = $rule['host'];
+foreach ($ports as $rule) {
     $state = ($rule['enabled']) ? 'disable' : 'enable';
     $state_anchor = 'anchor_' . $state;
+    $key = $rule['name'] . '/' . $rule['ip'] . '/' . $rule['protocol'] . '/' . $rule['port'];
 
     $item['title'] = $rule['name'];
     $item['action'] = '/app/dmz/incoming/delete/' . $key;
@@ -73,7 +75,9 @@ foreach ($hosts as $rule) {
     );
     $item['details'] = array(
         $rule['name'],
-        $rule['host'],
+        $rule['ip'],
+        ($rule['protocol'] == Firewall::PROTOCOL_ALL ? lang('base_all') : $rule['protocol']),
+        ($rule['port'] == Firewall::CONSTANT_ALL_PORTS ? lang('base_all') : $rule['port'])
     );
 
     $items[] = $item;

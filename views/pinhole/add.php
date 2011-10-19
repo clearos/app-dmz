@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Incoming firewall add rule view.
+ * DMZ firewall pinhole add view.
  *
  * @category   ClearOS
- * @package    Incoming_Firewall
+ * @package    Dmz
  * @subpackage Views
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
- * @link       http://www.clearfoundation.com/docs/developer/apps/egress_firewall/
+ * @link       http://www.clearfoundation.com/docs/developer/apps/dmz/
  */
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -37,64 +37,24 @@ $this->lang->load('base');
 $this->lang->load('firewall');
 
 ///////////////////////////////////////////////////////////////////////////////
-// Standard service
+// Form
 ///////////////////////////////////////////////////////////////////////////////
 
-echo form_open('egress_firewall/pinhole/add');
-echo form_header(lang('firewall_standard_service'));
+echo form_open('dmz/pinhole/add');
+echo form_header(lang('dmz_pinhole_connection'));
 
-echo field_simple_dropdown('service', $services, $service, lang('firewall_service'));
-
-echo field_button_set(
-    array(
-        form_submit_add('submit_standard', 'high'),
-        anchor_cancel('/app/egress_firewall')
-    )
-);
-
-echo form_footer();
-echo form_close();
-
-///////////////////////////////////////////////////////////////////////////////
-// Port
-///////////////////////////////////////////////////////////////////////////////
-
-echo form_open('egress_firewall/pinhole/add');
-echo form_header(lang('firewall_port'));
-
-echo field_input('port_nickname', $port_nickname, lang('firewall_nickname'));
-echo field_simple_dropdown('port_protocol', $protocols, $port_protocol, lang('firewall_protocol'));
+echo field_input('nickname', $nickname, lang('firewall_nickname'));
+echo field_input('ip_address', $ip_address, lang('firewall_ip_address'));
+echo field_checkbox('all', $all, lang('dmz_all_protocols_and_ports'));
+echo field_simple_dropdown('protocol', $protocols, $protocol, lang('firewall_protocol'));
 echo field_input('port', $port, lang('firewall_port'));
 
 echo field_button_set(
     array(
-        form_submit_add('submit_port', 'high'),
-        anchor_cancel('/app/egress_firewall')
+        form_submit_add('submit', 'high'),
+        anchor_cancel('/app/dmz')
     )
 );
 
 echo form_footer();
 echo form_close();
-
-///////////////////////////////////////////////////////////////////////////////
-// Port range
-///////////////////////////////////////////////////////////////////////////////
-
-echo form_open('egress_firewall/pinhole/add');
-echo form_header(lang('firewall_port_range'));
-
-echo field_input('range_nickname', $range_nickname, lang('firewall_nickname'));
-echo field_simple_dropdown('range_protocol', $protocols, $range_protocol, lang('firewall_protocol'));
-echo field_input('range_from', $range_from, lang('base_from'));
-echo field_input('range_to', $range_To, lang('base_to'));
-
-echo field_button_set(
-    array(
-        form_submit_add('submit_range', 'high'),
-        anchor_cancel('/app/egress_firewall')
-    )
-);
-
-echo form_footer();
-echo form_close();
-

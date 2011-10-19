@@ -68,23 +68,23 @@ class Pinhole extends ClearOS_Controller
         //------------------
 
         $this->load->library('dmz/Dmz');
-        $this->load->library('network/Network');
         $this->lang->load('dmz');
 
-        // Load the view data 
-        //------------------- 
+        // Load view data
+        //---------------
+
         try {
-//            $data['ports'] = $this->egress->get_exception_ports();
- //           $data['ranges'] = $this->egress->get_exception_port_ranges();
+            $data['pinholes'] = $this->dmz->get_pinhole_ports();
         } catch (Exception $e) {
             $this->page->view_exception($e);
             return;
         }
+ 
 
         // Load views
         //-----------
 
-        $this->page->view_form('dmz/pinhole/summary', $data, lang('dmz_destination_ports'));
+        $this->page->view_form('dmz/pinhole/summary', $data, lang('dmz_app_name'));
     }
 
     /**
@@ -102,149 +102,95 @@ class Pinhole extends ClearOS_Controller
         $this->lang->load('dmz');
         $this->lang->load('base');
 
-        // Set validation rules
-        //---------------------
-
-        $is_action = FALSE;
-
-        if ($this->input->post('submit_standard')) {
-            $this->form_validation->set_policy('service', 'dmz/Dmz', 'validate_service', TRUE);
-            $is_action = TRUE;
-        } else if ($this->input->post('submit_port')) {
-            $this->form_validation->set_policy('port_nickname', 'dmz/Dmz', 'validate_name', TRUE);
-            $this->form_validation->set_policy('port_protocol', 'dmz/Dmz', 'validate_protocol', TRUE);
+        $this->form_validation->set_policy('nickname', 'dmz/Dmz', 'validate_name', TRUE);
+        $this->form_validation->set_policy('ip_address', 'dmz/Dmz', 'validate_ip', TRUE);
+        if ($this->input->post('all') != 'on') {
+            $this->form_validation->set_policy('protocol', 'dmz/Dmz', 'validate_protocol', TRUE);
             $this->form_validation->set_policy('port', 'dmz/Dmz', 'validate_port', TRUE);
-            $is_action = TRUE;
-        } else if ($this->input->post('submit_range')) {
-            $this->form_validation->set_policy('range_nickname', 'dmz/Dmz', 'validate_name', TRUE);
-            $this->form_validation->set_policy('range_protocol', 'dmz/Dmz', 'validate_protocol', TRUE);
-            $this->form_validation->set_policy('range_from', 'dmz/Dmz', 'validate_port', TRUE);
-            $this->form_validation->set_policy('range_to', 'dmz/Dmz', 'validate_port', TRUE);
-            $is_action = TRUE;
         }
+        $form_ok = $this->form_validation->run();
 
         // Handle form submit
         //-------------------
 
-        if ($is_action && $this->form_validation->run()) {
+        if (($this->input->post('submit') && $form_ok)) {
             try {
-                if ($this->input->post('submit_standard')) {
-                    $this->egress->add_exception_standard_service($this->input->post('service'));
-                } else if ($this->input->post('submit_port')) {
-                    $this->egress->add_exception_port(
-                        $this->input->post('port_nickname'),
-                        $this->input->post('port_protocol'),
-                        $this->input->post('port')
-                    );
-                } else if ($this->input->post('submit_range')) {
-                    $this->egress->add_exception_port_range(
-                        $this->input->post('range_nickname'),
-                        $this->input->post('range_protocol'),
-                        $this->input->post('range_from'),
-                        $this->input->post('range_to')
-                    );
+                $my_protocol = $this->input->post('protocol');
+                $my_port = $this->input->post('port');
+
+                if ($this->input->post('all') == 'on') {
+                    $my_protocol = Dmz::PROTOCOL_ALL;
+                    $my_port = Dmz::CONSTANT_ALL_PORTS;
                 }
+
+                $this->dmz->add_pinhole_port(
+                    $this->input->post('nickname'),
+                    $this->input->post('ip_address'),
+                    $my_protocol,
+                    $my_port
+                );
 
                 $this->page->set_status_added();
                 redirect('/dmz');
             } catch (Exception $e) {
-                $this->page->set_message(clearos_exception_message($e));
+                $this->page->view_exception($e);
+                return;
             }
         }
 
-        // FIXME: trim services list for rules that are already enabled
-        $data['services'] = $this->egress->get_standard_service_list();
-        $data['protocols'] = $this->egress->get_protocols();
-        // Only want TCP and UDP
-        foreach ($data['protocols'] as $key => $protocol) {
-            if ($key != Dmz::PROTOCOL_TCP && $key != Dmz::PROTOCOL_UDP)
-                unset($data['protocols'][$key]);
-        }
-            
-        // Load the views
+        // Load view data
         //---------------
-
-        $this->page->view_form('dmz/port/add', $data, lang('base_add'));
-    }
-
-    /**
-     * Delete port rule.
-     *
-     * @param string  $protocol protocol
-     * @param integer $port     port
-     *
-     * @return view
-     */
-
-    function delete($protocol, $port)
-    {
-        $confirm_uri = '/app/dmz/port/destroy/' . $protocol . '/' . $port;
-        $cancel_uri = '/app/dmz';
-        $items = array($protocol . ' ' . $port);
-
-        $this->page->view_confirm_delete($confirm_uri, $cancel_uri, $items);
-    }
-
-    /**
-     * Delete port range rule.
-     *
-     * @param string  $protocol protocol
-     * @param integer $from     from port
-     * @param integer $to       to port
-     *
-     * @return view
-     */
-
-    function delete_range($protocol, $from, $to)
-    {
-        $confirm_uri = '/app/dmz/port/destroy_range/' . $protocol . '/' . $from . '/' . $to;
-        $cancel_uri = '/app/dmz';
-        $items = array($protocol . ' ' . $from . ':' . $to);
-
-        $this->page->view_confirm_delete($confirm_uri, $cancel_uri, $items);
-    }
-
-    /**
-     * Destroys port rule.
-     *
-     * @param string  $protocol protocol
-     * @param integer $port     port
-     *
-     * @return view
-     */
-
-    function destroy($protocol, $port)
-    {
-        // Load libraries
-        //---------------
-
-        $this->load->library('dmz/Dmz');
-
-        // Handle form submit
-        //-------------------
 
         try {
-            $this->egress->delete_exception_port($protocol, $port);
-
-            $this->page->set_status_deleted();
-            redirect('/dmz');
+            $data['protocols'] = $this->dmz->get_protocols();
+            // Only want TCP and UDP
+            foreach ($data['protocols'] as $key => $protocol) {
+                if ($key != Dmz::PROTOCOL_TCP && $key != Dmz::PROTOCOL_UDP)
+                    unset($data['protocols'][$key]);
+            }
+            
         } catch (Exception $e) {
             $this->page->view_exception($e);
             return;
         }
+ 
+        // Load the views
+        //---------------
+
+        $this->page->view_form('dmz/pinhole/add', $data, lang('base_add'));
     }
 
     /**
-     * Destroys port range rule.
+     * Delete pinhole rule.
      *
-     * @param string  $protocol protocol
-     * @param integer $from     from port
-     * @param integer $to       to port
+     * @param string $name     nickname
+     * @param string $ip       IP address
+     * @param string $protocol protocol
+     * @param string $port     port
      *
      * @return view
      */
 
-    function destroy_range($protocol, $from, $to)
+    function delete($name, $ip, $protocol, $port)
+    {
+        $confirm_uri = '/app/dmz/pinhole/destroy/' . $ip . '/' . $protocol . '/' . $port;
+        $cancel_uri = '/app/dmz';
+        $items = array($name. ' (' . $ip . ')');
+
+        $this->page->view_confirm_delete($confirm_uri, $cancel_uri, $items);
+    }
+
+    /**
+     * Destroys pinhole rule.
+     *
+     * @param string $ip       IP address
+     * @param string $protocol protocol
+     * @param string $port     port
+     *
+     * @return view
+     */
+
+    function destroy($ip, $protocol, $port)
     {
         // Load libraries
         //---------------
@@ -255,7 +201,7 @@ class Pinhole extends ClearOS_Controller
         //-------------------
 
         try {
-            $this->egress->delete_exception_port_range($protocol, $from, $to);
+            $this->dmz->delete_pinhole_port($ip, $protocol, ($port) ? $port : 0);
 
             $this->page->set_status_deleted();
             redirect('/dmz');
@@ -268,43 +214,20 @@ class Pinhole extends ClearOS_Controller
     /**
      * Disables port rule.
      *
-     * @param string  $protocol protocol
-     * @param integer $port     port
+     * @param string $name     nickname
+     * @param string $ip       IP address
+     * @param string $protocol protocol
+     * @param string $port     port
      *
      * @return view
      */
 
-    function disable($protocol, $port)
+    function disable($name, $ip, $protocol, $port)
     {
         try {
             $this->load->library('dmz/Dmz');
 
-            $this->egress->toggle_enable_exception_port(FALSE, $protocol, $port);
-
-            $this->page->set_status_disabled();
-            redirect('/dmz');
-        } catch (Exception $e) {
-            $this->page->view_exception($e);
-            return;
-        }
-    }
-
-    /**
-     * Disables range rule.
-     *
-     * @param string  $protocol protocol
-     * @param integer $from     from port
-     * @param integer $to       to port
-     *
-     * @return view
-     */
-
-    function disable_range($protocol, $from, $to)
-    {
-        try {
-            $this->load->library('dmz/Dmz');
-
-            $this->egress->toggle_enable_exception_port_range(FALSE, $protocol, $from, $to);
+            $this->dmz->toggle_enable_pinhole_port(FALSE, $ip, $protocol, ($port) ? $port : 0);
 
             $this->page->set_status_disabled();
             redirect('/dmz');
@@ -317,18 +240,20 @@ class Pinhole extends ClearOS_Controller
     /**
      * Enables port rule.
      *
-     * @param string  $protocol protocol
-     * @param integer $port     port
+     * @param string $name     nickname
+     * @param string $ip       IP address
+     * @param string $protocol protocol
+     * @param string $port     port
      *
      * @return view
      */
 
-    function enable($protocol, $port)
+    function enable($name, $ip, $protocol, $port)
     {
         try {
             $this->load->library('dmz/Dmz');
 
-            $this->egress->toggle_enable_exception_port(TRUE, $protocol, $port);
+            $this->dmz->toggle_enable_pinhole_port(TRUE, $ip, $protocol, ($port) ? $port : 0);
 
             $this->page->set_status_enabled();
             redirect('/dmz');
@@ -338,28 +263,4 @@ class Pinhole extends ClearOS_Controller
         }
     }
 
-    /**
-     * Enables range rule.
-     *
-     * @param string  $protocol protocol
-     * @param integer $from     from port
-     * @param integer $to       to port
-     *
-     * @return view
-     */
-
-    function enable_range($protocol, $from, $to)
-    {
-        try {
-            $this->load->library('dmz/Dmz');
-
-            $this->egress->toggle_enable_exception_port_range(TRUE, $protocol, $from, $to);
-
-            $this->page->set_status_enabled();
-            redirect('/dmz');
-        } catch (Exception $e) {
-            $this->page->view_exception($e);
-            return;
-        }
-    }
 }

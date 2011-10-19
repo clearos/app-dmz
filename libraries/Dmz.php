@@ -7,7 +7,7 @@
  * @package    Dmz
  * @subpackage Libraries
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2004-2011 ClearFoundation
+ * @copyright  2011 ClearFoundation
  * @license    http://www.gnu.org/copyleft/lgpl.html GNU Lesser General Public License version 3 or later
  * @link       http://www.clearfoundation.com/docs/developer/apps/dmz/
  */
@@ -84,7 +84,7 @@ clearos_load_library('base/Validation_Exception');
  * @package    Dmz
  * @subpackage Libraries
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2004-2011 ClearFoundation
+ * @copyright  2011 ClearFoundation
  * @license    http://www.gnu.org/copyleft/lgpl.html GNU Lesser General Public License version 3 or later
  * @link       http://www.clearfoundation.com/docs/developer/apps/dmz/
  */
@@ -122,23 +122,23 @@ class Dmz extends Firewall
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        $rule = new FirewallRule();
+        $rule = new Rule();
 
         try {
 
             // Validation
             //-----------
 
-            Validation_Exception::is_valid($this->validate_nickname($nickname));
+            Validation_Exception::is_valid($this->validate_name($nickname));
             Validation_Exception::is_valid($this->validate_ip($ip));
             Validation_Exception::is_valid($this->validate_protocol($protocol));
             Validation_Exception::is_valid($this->validate_port($port));
 
-            $rule->set_protocol($rule->ConvertProtocolName($protocol));
+            $rule->set_protocol($rule->convert_protocol_name($protocol));
             $rule->set_name($nickname);
             $rule->set_address($ip);
             $rule->set_port($port);
-            $rule->set_flags(FirewallRule::DMZ_INCOMING | FirewallRule::ENABLED);
+            $rule->set_flags(Rule::DMZ_INCOMING | Rule::ENABLED);
 
             $this->add_rule($rule);
 
@@ -163,13 +163,14 @@ class Dmz extends Firewall
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        $rule = new FirewallRule();
+        $rule = new Rule();
 
         try {
+
             // Validation
             //-----------
 
-            Validation_Exception::is_valid($this->validate_nickname($nickname));
+            Validation_Exception::is_valid($this->validate_name($nickname));
             Validation_Exception::is_valid($this->validate_ip($ip));
             Validation_Exception::is_valid($this->validate_protocol($protocol));
             Validation_Exception::is_valid($this->validate_port($port));
@@ -178,11 +179,11 @@ class Dmz extends Firewall
             $rule->set_name($nickname);
             $rule->set_address($ip);
             $rule->set_port($port);
-            $rule->set_flags(FirewallRule::DMZ_PINHOLE | FirewallRule::ENABLED);
+            $rule->set_flags(Rule::DMZ_PINHOLE | Rule::ENABLED);
 
             $this->add_rule($rule);
+
         } catch (Exception $e) {
-            throw new Engine_Exception(clearos_exception_message($e), CLEAROS_ERROR);
             throw new Engine_Exception(clearos_exception_message($e), CLEAROS_ERROR);
         }
     }
@@ -202,7 +203,7 @@ class Dmz extends Firewall
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        $rule = new FirewallRule();
+        $rule = new Rule();
 
         try {
             // Validation
@@ -214,17 +215,17 @@ class Dmz extends Firewall
 
             switch ($protocol) {
                 case "TCP":
-                    $rule->set_protocol(FirewallRule::PROTOCOL_TCP);
+                    $rule->set_protocol(Firewall::PROTOCOL_TCP);
                     break;
 
                 case "UDP":
-                    $rule->set_protocol(FirewallRule::PROTOCOL_UDP);
+                    $rule->set_protocol(Firewall::PROTOCOL_UDP);
                     break;
             }
 
             $rule->set_address($ip);
             $rule->set_port(($port) ? $port : 0);
-            $rule->set_flags(FirewallRule::DMZ_PINHOLE);
+            $rule->set_flags(Rule::DMZ_PINHOLE);
             $this->delete_rule($rule);
         } catch (Exception $e) {
             throw new Engine_Exception(clearos_exception_message($e), CLEAROS_ERROR);
@@ -246,7 +247,7 @@ class Dmz extends Firewall
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        $rule = new FirewallRule();
+        $rule = new Rule();
 
         try {
 
@@ -259,17 +260,17 @@ class Dmz extends Firewall
 
             switch ($protocol) {
                 case "TCP":
-                    $rule->set_protocol(FirewallRule::PROTOCOL_TCP);
+                    $rule->set_protocol(Firewall::PROTOCOL_TCP);
                     break;
 
                 case "UDP":
-                    $rule->set_protocol(FirewallRule::PROTOCOL_UDP);
+                    $rule->set_protocol(Firewall::PROTOCOL_UDP);
                     break;
             }
 
             $rule->set_address($ip);
             $rule->set_port(($port) ? $port : 0);
-            $rule->set_flags(FirewallRule::DMZ_INCOMING);
+            $rule->set_flags(Rule::DMZ_INCOMING);
             $this->delete_rule($rule);
         } catch (Exception $e) {
             throw new Engine_Exception(clearos_exception_message($e), CLEAROS_ERROR);
@@ -292,7 +293,7 @@ class Dmz extends Firewall
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        $rule = new FirewallRule();
+        $rule = new Rule();
 
         try {
             // Validation
@@ -304,17 +305,17 @@ class Dmz extends Firewall
 
             switch ($protocol) {
                 case "TCP":
-                    $rule->set_protocol(FirewallRule::PROTOCOL_TCP);
+                    $rule->set_protocol(Firewall::PROTOCOL_TCP);
                     break;
 
                 case "UDP":
-                    $rule->set_protocol(FirewallRule::PROTOCOL_UDP);
+                    $rule->set_protocol(Firewall::PROTOCOL_UDP);
                     break;
             }
 
             $rule->set_address($ip);
             $rule->set_port(($port) ? $port : 0);
-            $rule->set_flags(FirewallRule::DMZ_PINHOLE);
+            $rule->set_flags(Rule::DMZ_PINHOLE);
 
             if(!($rule = $this->find_rule($rule))) return;
 
@@ -342,7 +343,7 @@ class Dmz extends Firewall
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        $rule = new FirewallRule();
+        $rule = new Rule();
 
         try {
             // Validation
@@ -353,17 +354,17 @@ class Dmz extends Firewall
             Validation_Exception::is_valid($this->validate_port($port));
             switch ($protocol) {
                 case "TCP":
-                    $rule->set_protocol(FirewallRule::PROTOCOL_TCP);
+                    $rule->set_protocol(Firewall::PROTOCOL_TCP);
                     break;
 
                 case "UDP":
-                    $rule->set_protocol(FirewallRule::PROTOCOL_UDP);
+                    $rule->set_protocol(Firewall::PROTOCOL_UDP);
                     break;
             }
 
             $rule->set_address($ip);
             $rule->set_port(($port) ? $port : 0);
-            $rule->set_flags(FirewallRule::DMZ_INCOMING);
+            $rule->set_flags(Rule::DMZ_INCOMING);
 
             if(!($rule = $this->find_rule($rule))) return;
 
@@ -402,21 +403,21 @@ class Dmz extends Firewall
         }
 
         foreach ($rules as $rule) {
-            if (!($rule->get_flags() & FirewallRule::DMZ_INCOMING)) continue;
+            if (!($rule->get_flags() & Rule::DMZ_INCOMING)) continue;
 
             $portinfo = array();
 
             switch ($rule->get_protocol()) {
-                case FirewallRule::PROTOCOL_TCP:
+                case Firewall::PROTOCOL_TCP:
                     $portinfo['protocol'] = "TCP";
                     break;
 
-                case FirewallRule::PROTOCOL_UDP:
+                case Firewall::PROTOCOL_UDP:
                     $portinfo['protocol'] = "UDP";
                     break;
 
                 default:
-                    $portinfo['protocol'] = Firewall::CONSTANT_ALL_PROTOCOLS;
+                    $portinfo['protocol'] = Firewall::PROTOCOL_ALL;
                     break;
             }
 
@@ -457,22 +458,22 @@ class Dmz extends Firewall
         }
 
         foreach ($rules as $rule) {
-            if (!($rule->get_flags() & FirewallRule::DMZ_PINHOLE))
+            if (!($rule->get_flags() & Rule::DMZ_PINHOLE))
                 continue;
 
             $portinfo = array();
 
             switch ($rule->get_protocol()) {
-                case FirewallRule::PROTOCOL_TCP:
+                case Firewall::PROTOCOL_TCP:
                     $portinfo['protocol'] = "TCP";
                     break;
 
-                case FirewallRule::PROTOCOL_UDP:
+                case Firewall::PROTOCOL_UDP:
                     $portinfo['protocol'] = "UDP";
                     break;
 
                 default:
-                    $portinfo['protocol'] = Firewall::CONSTANT_ALL_PROTOCOLS;
+                    $portinfo['protocol'] = Firewall::PROTOCOL_ALL;
                     break;
             }
 

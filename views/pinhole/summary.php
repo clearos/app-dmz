@@ -60,8 +60,8 @@ $anchors = array(anchor_add('/app/dmz/pinhole/add'));
 // Ports
 ///////////////////////////////////////////////////////////////////////////////
 
-foreach ($ports as $rule) {
-    $key = $rule['protocol'] . '/' . $rule['port'];
+foreach ($pinholes as $rule) {
+    $key = $rule['name'] . '/' . $rule['ip'] . '/' . $rule['protocol'] . '/' . $rule['port'];
     $state = ($rule['enabled']) ? 'disable' : 'enable';
     $state_anchor = 'anchor_' . $state;
 
@@ -75,9 +75,9 @@ foreach ($ports as $rule) {
     );
     $item['details'] = array(
         $rule['name'],
-        $rule['service'],
-        $rule['protocol'],
-        $rule['port'],
+        $rule['ip'],
+        ($rule['protocol'] == Firewall::PROTOCOL_ALL ? lang('base_all') : $rule['protocol']),
+        ($rule['port'] == Firewall::CONSTANT_ALL_PORTS ? lang('base_all') : $rule['port'])
     );
 
     $items[] = $item;

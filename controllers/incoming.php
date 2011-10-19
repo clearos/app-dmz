@@ -30,6 +30,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
+// D E P E N D E N C I E S
+///////////////////////////////////////////////////////////////////////////////
+
+// Classes
+//--------
+
+use \clearos\apps\dmz\Dmz as Dmz;
+
+///////////////////////////////////////////////////////////////////////////////
 // C L A S S
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -62,7 +71,7 @@ class Incoming extends ClearOS_Controller
         //---------------
 
         try {
- //           $data['hosts'] = $this->egress->get_exception_hosts();
+            $data['ports'] = $this->dmz->get_forward_ports();
         } catch (Exception $e) {
             $this->page->view_exception($e);
             return;
@@ -92,7 +101,11 @@ class Incoming extends ClearOS_Controller
         //---------------------
 
         $this->form_validation->set_policy('nickname', 'dmz/Dmz', 'validate_name', TRUE);
-        $this->form_validation->set_policy('host', 'dmz/Dmz', 'validate_address', TRUE);
+        $this->form_validation->set_policy('ip_address', 'dmz/Dmz', 'validate_ip', TRUE);
+        if ($this->input->post('all') != 'on') {
+            $this->form_validation->set_policy('protocol', 'dmz/Dmz', 'validate_protocol', TRUE);
+            $this->form_validation->set_policy('port', 'dmz/Dmz', 'validate_port', TRUE);
+        }
         $form_ok = $this->form_validation->run();
 
         // Handle form submit
@@ -100,7 +113,20 @@ class Incoming extends ClearOS_Controller
 
         if (($this->input->post('submit') && $form_ok)) {
             try {
-                $this->egress->add_exception_destination($this->input->post('nickname'), $this->input->post('host'));
+                $my_protocol = $this->input->post('protocol');
+                $my_port = $this->input->post('port');
+
+                if ($this->input->post('all') == 'on') {
+                    $my_protocol = Dmz::PROTOCOL_ALL;
+                    $my_port = Dmz::CONSTANT_ALL_PORTS;
+                }
+
+                $this->dmz->add_forward_port(
+                    $this->input->post('nickname'),
+                    $this->input->post('ip_address'),
+                    $my_protocol,
+                    $my_port
+                );
 
                 $this->page->set_status_added();
                 redirect('/dmz');
@@ -110,6 +136,22 @@ class Incoming extends ClearOS_Controller
             }
         }
 
+        // Load view data
+        //---------------
+
+        try {
+            $data['protocols'] = $this->dmz->get_protocols();
+            // Only want TCP and UDP
+            foreach ($data['protocols'] as $key => $protocol) {
+                if ($key != Dmz::PROTOCOL_TCP && $key != Dmz::PROTOCOL_UDP)
+                    unset($data['protocols'][$key]);
+            }
+            
+        } catch (Exception $e) {
+            $this->page->view_exception($e);
+            return;
+        }
+ 
         // Load the views
         //---------------
 
@@ -117,36 +159,41 @@ class Incoming extends ClearOS_Controller
     }
 
     /**
-     * Delete blocked host.
+     * Delete port forward host.
      *
-     * @param string $host host
+     * @param string $name     nickname
+     * @param string $ip       IP address
+     * @param string $protocol protocol
+     * @param string $port     port
      *
      * @return view
      */
 
-    function delete($host)
+    function delete($name, $ip, $protocol, $port)
     {
-        $confirm_uri = '/app/dmz/incoming/destroy/' . $host;
+        $confirm_uri = '/app/dmz/incoming/destroy/' . $ip . '/' . $protocol . '/' . $port;
         $cancel_uri = '/app/dmz';
-        $items = array($host);
+        $items = array($name . ' (' . $ip . ')');
 
         $this->page->view_confirm_delete($confirm_uri, $cancel_uri, $items);
     }
 
     /**
-     * Destroys blocked host rule.
+     * Destroys port forward rule.
      *
-     * @param string $host host
+     * @param string $ip       IP address
+     * @param string $protocol protocol
+     * @param string $port     port
      *
      * @return view
      */
 
-    function destroy($host)
+    function destroy($ip, $protocol, $port)
     {
         try {
             $this->load->library('dmz/Dmz');
 
-            $this->egress->delete_exception_destination($host);
+            $this->dmz->delete_forward_port($ip, $protocol, ($port) ? $port : 0);
 
             $this->page->set_status_deleted();
             redirect('/dmz');
@@ -157,19 +204,22 @@ class Incoming extends ClearOS_Controller
     }
 
     /**
-     * Disables blocked host rule.
+     * Disables port forward rule.
      *
-     * @param string $host host
+     * @param string $name     nickname
+     * @param string $ip       IP address
+     * @param string $protocol protocol
+     * @param string $port     port
      *
      * @return view
      */
 
-    function disable($host)
+    function disable($name, $ip, $protocol, $port)
     {
         try {
             $this->load->library('dmz/Dmz');
 
-            $this->egress->toggle_enable_exception_destination(FALSE, $host);
+            $this->dmz->toggle_enable_forward_port(FALSE, $ip, $protocol, ($port) ? $port : 0);
 
             $this->page->set_status_disabled();
             redirect('/dmz');
@@ -180,19 +230,22 @@ class Incoming extends ClearOS_Controller
     }
 
     /**
-     * Enables block host rule.
+     * Enables port forward rule.
      *
-     * @param string $host host
+     * @param string $name     nickname
+     * @param string $ip       IP address
+     * @param string $protocol protocol
+     * @param string $port     port
      *
      * @return view
      */
 
-    function enable($host)
+    function enable($name, $ip, $protocol, $port)
     {
         try {
             $this->load->library('dmz/Dmz');
 
-            $this->egress->toggle_enable_exception_destination(TRUE, $host);
+            $this->dmz->toggle_enable_forward_port(TRUE, $ip, $protocol, ($port) ? $port : 0);
 
             $this->page->set_status_enabled();
             redirect('/dmz');

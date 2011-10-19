@@ -29,6 +29,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+use \clearos\apps\network\Role as Role;
+
 ///////////////////////////////////////////////////////////////////////////////
 // C L A S S
 ///////////////////////////////////////////////////////////////////////////////
@@ -59,11 +61,26 @@ class Dmz extends ClearOS_Controller
         //---------------
 
         $this->lang->load('dmz');
+        $this->load->library('network/Iface_Manager');
+
+        // Sanity check - make sure there is a DMZ interface configured
+        //-------------
+
+        $sanity_ok = FALSE;
+        $network_interface = $this->iface_manager->get_interface_details();
+        foreach ($network_interface as $interface => $detail) {
+            if ($detail['role'] == Role::ROLE_DMZ)
+                $sanity_ok = TRUE;
+        }
+
+        if (!$sanity_ok)
+            $this->page->set_message(lang('dmz_network_not_configured'), 'warning');
 
         // Load views
         //-----------
 
         $views = array('dmz/incoming', 'dmz/pinhole');
+
 
         $this->page->view_forms($views, lang('dmz_app_name'));
     }
