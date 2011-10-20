@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Incoming firewall summary view.
+ * DMZ firewall summary view.
  *
  * @category   ClearOS
- * @package    Incoming_Firewall
+ * @package    DMZ
  * @subpackage Views
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
