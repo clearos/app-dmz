@@ -4,7 +4,7 @@
  * Javascript helper for DMZ.
  *
  * @category   Apps
- * @package    Mail_Archive
+ * @package    DMZ
  * @subpackage Javascript
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
