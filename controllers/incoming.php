@@ -140,13 +140,7 @@ class Incoming extends ClearOS_Controller
         //---------------
 
         try {
-            $data['protocols'] = $this->dmz->get_protocols();
-            // Only want TCP and UDP
-            foreach ($data['protocols'] as $key => $protocol) {
-                if ($key != Dmz::PROTOCOL_TCP && $key != Dmz::PROTOCOL_UDP)
-                    unset($data['protocols'][$key]);
-            }
-            
+            $data['protocols'] = $this->dmz->get_basic_protocols();
         } catch (Exception $e) {
             $this->page->view_exception($e);
             return;
