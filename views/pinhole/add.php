@@ -4,7 +4,7 @@
  * DMZ firewall pinhole add view.
  *
  * @category   ClearOS
- * @package    Dmz
+ * @package    DMZ
  * @subpackage Views
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation

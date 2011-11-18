@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Dmz firewall class.
+ * DMZ firewall class.
  *
  * @category   Apps
- * @package    Dmz
+ * @package    DMZ
  * @subpackage Libraries
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
@@ -78,10 +78,10 @@ clearos_load_library('base/Validation_Exception');
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * Dmz firewall class.
+ * DMZ firewall class.
  *
  * @category   Apps
- * @package    Dmz
+ * @package    DMZ
  * @subpackage Libraries
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation

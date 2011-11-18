@@ -4,7 +4,7 @@
  * DMZ pinhole controller.
  *
  * @category   Apps
- * @package    Dmz_Firewall
+ * @package    DMZ
  * @subpackage Controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
@@ -46,7 +46,7 @@ use \clearos\apps\dmz\Dmz as Dmz;
  * DMZ pinhole controller.
  *
  * @category   Apps
- * @package    Dmz_Firewall
+ * @package    DMZ
  * @subpackage Controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
@@ -57,7 +57,7 @@ use \clearos\apps\dmz\Dmz as Dmz;
 class Pinhole extends ClearOS_Controller
 {
     /**
-     * Dmz pinhole overview.
+     * DMZ pinhole overview.
      *
      * @return view
      */

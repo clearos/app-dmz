@@ -4,7 +4,7 @@
  * DMZ incoming controller.
  *
  * @category   Apps
- * @package    Dmz_Firewall
+ * @package    DMZ
  * @subpackage Controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
@@ -46,7 +46,7 @@ use \clearos\apps\dmz\Dmz as Dmz;
  * DMZ incoming controller.
  *
  * @category   Apps
- * @package    Dmz_Firewall
+ * @package    DMZ
  * @subpackage Controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
@@ -57,7 +57,7 @@ use \clearos\apps\dmz\Dmz as Dmz;
 class Incoming extends ClearOS_Controller
 {
     /**
-     * Dmz incoming overview.
+     * DMZ incoming overview.
      *
      * @return view
      */

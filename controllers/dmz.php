@@ -4,7 +4,7 @@
  * DMZ firewall controller.
  *
  * @category   Apps
- * @package    DMZ_Firewall
+ * @package    DMZ
  * @subpackage Controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
@@ -39,7 +39,7 @@ use \clearos\apps\network\Role as Role;
  * DMZ firewall controller.
  *
  * @category   Apps
- * @package    DMZ_Firewall
+ * @package    DMZ
  * @subpackage Controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
