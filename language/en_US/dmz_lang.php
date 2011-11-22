@@ -1,7 +1,7 @@
 <?php
 
 $lang['dmz_app_name'] = 'DMZ Firewall';
-$lang['dmz_app_description'] = 'Adding a DMZ to host higher-risk external services like web, email and VoIP can increase the security of your Local Area Network.';
+$lang['dmz_app_description'] = 'Adding a DMZ to host higher-risk external services like web, e-mail and VoIP can increase the security of your Local Area Network.';
 $lang['dmz_pinhole_connection'] = 'DMZ Pinhole (DMZ to LAN) Connection';
 $lang['dmz_pinhole_connections'] = 'DMZ Pinhole (DMZ to LAN) Connections';
 $lang['dmz_incoming_connection'] = 'DMZ Incoming Connection';
