@@ -1,10 +1,12 @@
 
 Name: app-dmz
+Group: ClearOS/Apps
 Version: 6.2.0.beta3
 Release: 1%{dist}
 Summary: DMZ Firewall
 License: GPLv3
-Group: ClearOS/Apps
+Packager: ClearFoundation
+Vendor: ClearFoundation
 Source: %{name}-%{version}.tar.gz
 Buildarch: noarch
 Requires: %{name}-core = %{version}-%{release}
@@ -16,8 +18,8 @@ Adding a DMZ to host higher-risk external services like web, e-mail and VoIP can
 
 %package core
 Summary: DMZ Firewall - APIs and install
-License: LGPLv3
 Group: ClearOS/Libraries
+License: LGPLv3
 Requires: app-base-core
 Requires: app-firewall-core
 Requires: app-network-core
