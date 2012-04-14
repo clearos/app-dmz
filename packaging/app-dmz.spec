@@ -1,7 +1,7 @@
 
 Name: app-dmz
 Epoch: 1
-Version: 1.0.10
+Version: 1.1.0
 Release: 1%{dist}
 Summary: DMZ Firewall
 License: GPLv3
@@ -16,7 +16,7 @@ Requires: app-network
 Adding a DMZ to host higher-risk external services like web, e-mail and VoIP can increase the security of your Local Area Network.
 
 %package core
-Summary: DMZ Firewall - APIs and install
+Summary: DMZ Firewall - Core
 License: LGPLv3
 Group: ClearOS/Libraries
 Requires: app-base-core
