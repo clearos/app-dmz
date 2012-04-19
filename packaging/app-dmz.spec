@@ -13,7 +13,7 @@ Requires: app-base
 Requires: app-network
 
 %description
-Adding a DMZ to host higher-risk external services like web, e-mail and VoIP can increase the security of your Local Area Network.
+The DMZ app provides firewall tools for systems in the de-militarized zone.  Isolating high risk external services such as web, e-mail and VoIP system can increase the security of your network.
 
 %package core
 Summary: DMZ Firewall - Core
@@ -24,7 +24,7 @@ Requires: app-firewall-core
 Requires: app-network-core
 
 %description core
-Adding a DMZ to host higher-risk external services like web, e-mail and VoIP can increase the security of your Local Area Network.
+The DMZ app provides firewall tools for systems in the de-militarized zone.  Isolating high risk external services such as web, e-mail and VoIP system can increase the security of your network.
 
 This package provides the core API and libraries.
 
