@@ -39,3 +39,7 @@ $app['core_requires'] = array(
     'app-firewall-core',
     'app-network-core',
 );
+
+$app['delete_dependency'] = array(
+    'app-dmz-core'
+);
