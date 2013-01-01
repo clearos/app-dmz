@@ -83,15 +83,18 @@ foreach ($pinholes as $rule) {
     $items[] = $item;
 }
 
+sort($items);
+
 ///////////////////////////////////////////////////////////////////////////////
 // Summary table
 ///////////////////////////////////////////////////////////////////////////////
 
-sort($items);
+$options['default_rows'] = 25;
 
 echo summary_table(
     lang('dmz_pinhole_connections'),
     $anchors,
     $headers,
-    $items
+    $items,
+    $options
 );

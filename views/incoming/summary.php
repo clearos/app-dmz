@@ -89,9 +89,12 @@ sort($items);
 // Summary table
 ///////////////////////////////////////////////////////////////////////////////
 
+$options['default_rows'] = 25;
+
 echo summary_table(
     lang('dmz_incoming_connections'),
     $anchors,
     $headers,
-    $items
+    $items,
+    $options
 );
