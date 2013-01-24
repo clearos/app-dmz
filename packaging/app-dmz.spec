@@ -13,7 +13,7 @@ Requires: app-base
 Requires: app-network
 
 %description
-The DMZ app provides firewall tools for systems in the de-militarized zone.  Isolating high risk external services such as web, e-mail and VoIP system can increase the security of your network.
+The DMZ app provides firewall tools for systems in the de-militarized zone.  Isolating high risk external services such as web, e-mail and VoIP system can improve the security of your network.
 
 %package core
 Summary: DMZ Firewall - Core
@@ -24,7 +24,7 @@ Requires: app-firewall-core >= 1:1.4.15
 Requires: app-network-core
 
 %description core
-The DMZ app provides firewall tools for systems in the de-militarized zone.  Isolating high risk external services such as web, e-mail and VoIP system can increase the security of your network.
+The DMZ app provides firewall tools for systems in the de-militarized zone.  Isolating high risk external services such as web, e-mail and VoIP system can improve the security of your network.
 
 This package provides the core API and libraries.
 
