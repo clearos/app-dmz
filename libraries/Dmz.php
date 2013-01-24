@@ -140,7 +140,7 @@ class Dmz extends Firewall
             $rule->set_port($port);
             $rule->set_flags(Rule::DMZ_INCOMING | Rule::ENABLED);
 
-            $this->add_rule($rule);
+            $this->_add_rule($rule);
 
         } catch (Exception $e) {
             throw new Engine_Exception(clearos_exception_message($e), CLEAROS_ERROR);
@@ -181,7 +181,7 @@ class Dmz extends Firewall
             $rule->set_port($port);
             $rule->set_flags(Rule::DMZ_PINHOLE | Rule::ENABLED);
 
-            $this->add_rule($rule);
+            $this->_add_rule($rule);
 
         } catch (Exception $e) {
             throw new Engine_Exception(clearos_exception_message($e), CLEAROS_ERROR);
@@ -226,7 +226,7 @@ class Dmz extends Firewall
             $rule->set_address($ip);
             $rule->set_port(($port) ? $port : 0);
             $rule->set_flags(Rule::DMZ_PINHOLE);
-            $this->delete_rule($rule);
+            $this->_delete_rule($rule);
         } catch (Exception $e) {
             throw new Engine_Exception(clearos_exception_message($e), CLEAROS_ERROR);
         }
@@ -271,7 +271,7 @@ class Dmz extends Firewall
             $rule->set_address($ip);
             $rule->set_port(($port) ? $port : 0);
             $rule->set_flags(Rule::DMZ_INCOMING);
-            $this->delete_rule($rule);
+            $this->_delete_rule($rule);
         } catch (Exception $e) {
             throw new Engine_Exception(clearos_exception_message($e), CLEAROS_ERROR);
         }
@@ -317,11 +317,11 @@ class Dmz extends Firewall
             $rule->set_port(($port) ? $port : 0);
             $rule->set_flags(Rule::DMZ_PINHOLE);
 
-            if(!($rule = $this->find_rule($rule))) return;
+            if(!($rule = $this->_find_rule($rule))) return;
 
-            $this->delete_rule($rule);
+            $this->_delete_rule($rule);
             ($enabled) ? $rule->Enable() : $rule->Disable();
-            $this->add_rule($rule);
+            $this->_add_rule($rule);
         } catch (Exception $e) {
             throw new Engine_Exception(clearos_exception_message($e), CLEAROS_ERROR);
         }
@@ -366,11 +366,11 @@ class Dmz extends Firewall
             $rule->set_port(($port) ? $port : 0);
             $rule->set_flags(Rule::DMZ_INCOMING);
 
-            if(!($rule = $this->find_rule($rule))) return;
+            if(!($rule = $this->_find_rule($rule))) return;
 
-            $this->delete_rule($rule);
+            $this->_delete_rule($rule);
             ($enabled) ? $rule->Enable() : $rule->Disable();
-            $this->add_rule($rule);
+            $this->_add_rule($rule);
         } catch (Exception $e) {
             throw new Engine_Exception(clearos_exception_message($e), CLEAROS_ERROR);
         }
@@ -397,7 +397,7 @@ class Dmz extends Firewall
         $portlist = array();
 
         try {
-            $rules = $this->get_rules();
+            $rules = $this->_get_rules();
         } catch (Exception $e) {
             throw new Engine_Exception(clearos_exception_message($e), CLEAROS_ERROR);
         }
@@ -452,7 +452,7 @@ class Dmz extends Firewall
         $portlist = array();
 
         try {
-            $rules = $this->get_rules();
+            $rules = $this->_get_rules();
         } catch (Exception $e) {
             throw new Engine_Exception(clearos_exception_message($e), CLEAROS_ERROR);
         }

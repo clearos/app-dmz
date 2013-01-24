@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'dmz';
-$app['version'] = '1.1.0';
+$app['version'] = '1.4.15';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -36,7 +36,7 @@ $app['requires'] = array(
 );
 
 $app['core_requires'] = array(
-    'app-firewall-core',
+    'app-firewall-core >= 1:1.4.15',
     'app-network-core',
 );
 
