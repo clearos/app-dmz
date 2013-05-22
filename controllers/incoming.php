@@ -3,9 +3,9 @@
 /**
  * DMZ incoming controller.
  *
- * @category   Apps
- * @package    DMZ
- * @subpackage Controllers
+ * @category   apps
+ * @package    dmz
+ * @subpackage controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
@@ -45,9 +45,9 @@ use \clearos\apps\dmz\Dmz as Dmz;
 /**
  * DMZ incoming controller.
  *
- * @category   Apps
- * @package    DMZ
- * @subpackage Controllers
+ * @category   apps
+ * @package    dmz
+ * @subpackage controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
