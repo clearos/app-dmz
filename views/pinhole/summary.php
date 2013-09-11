@@ -66,6 +66,7 @@ foreach ($pinholes as $rule) {
     $state_anchor = 'anchor_' . $state;
 
     $item['title'] = $rule['name'];
+    $item['current_state'] = (bool)$rule['enabled'];
     $item['action'] = '/app/dmz/pinhole/delete/' . $key;
     $item['anchors'] = button_set(
         array(
@@ -89,7 +90,10 @@ sort($items);
 // Summary table
 ///////////////////////////////////////////////////////////////////////////////
 
-$options['default_rows'] = 25;
+$options = array (
+    'default_rows' => 25,
+    'row-enable-disable' => TRUE
+);
 
 echo summary_table(
     lang('dmz_pinhole_connections'),
