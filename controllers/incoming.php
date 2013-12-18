@@ -37,6 +37,7 @@
 //--------
 
 use \clearos\apps\dmz\Dmz as Dmz;
+use \clearos\apps\network\Network as Network;
 
 ///////////////////////////////////////////////////////////////////////////////
 // C L A S S
@@ -65,6 +66,7 @@ class Incoming extends ClearOS_Controller
     function index()
     {
         $this->load->library('dmz/Dmz');
+        $this->load->library('network/Network');
         $this->lang->load('dmz');
 
         // Load view data
@@ -72,6 +74,8 @@ class Incoming extends ClearOS_Controller
 
         try {
             $data['ports'] = $this->dmz->get_forward_ports();
+            $data['network_mode'] = $this->network->get_mode();
+            $data['panic'] = $this->dmz->is_panic();
         } catch (Exception $e) {
             $this->page->view_exception($e);
             return;
