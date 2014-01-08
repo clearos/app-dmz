@@ -36,7 +36,7 @@ $app['requires'] = array(
 );
 
 $app['core_requires'] = array(
-    'app-firewall-core >= 1:1.5.19',
+    'app-firewall >= 1:1.5.19',
     'app-network-core',
 );
 
