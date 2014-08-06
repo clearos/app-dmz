@@ -56,17 +56,16 @@ clearos_load_language('dmz');
 // Classes
 //--------
 
-use \clearos\apps\firewall\Rule as Rule;
 use \clearos\apps\firewall\Firewall as Firewall;
-use \clearos\apps\firewall\Metadata as Metadata;
+use \clearos\apps\firewall\Rule as Rule;
 
-clearos_load_library('firewall/Rule');
 clearos_load_library('firewall/Firewall');
-clearos_load_library('firewall/Metadata');
+clearos_load_library('firewall/Rule');
 
 // Exceptions
 //-----------
 
+use \Exception as Exception;
 use \clearos\apps\base\Engine_Exception as Engine_Exception;
 use \clearos\apps\base\Validation_Exception as Validation_Exception;
 
