@@ -1,7 +1,7 @@
 
 Name: app-dmz
 Epoch: 1
-Version: 1.4.22
+Version: 1.6.5
 Release: 1%{dist}
 Summary: DMZ Firewall
 License: GPLv3
@@ -20,7 +20,7 @@ Summary: DMZ Firewall - Core
 License: LGPLv3
 Group: ClearOS/Libraries
 Requires: app-base-core
-Requires: app-firewall-core >= 1:1.5.19
+Requires: app-firewall >= 1:1.5.19
 Requires: app-network-core
 
 %description core
