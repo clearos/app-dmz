@@ -1,7 +1,7 @@
 
 Name: app-dmz
 Epoch: 1
-Version: 2.0.0
+Version: 2.0.1
 Release: 1%{dist}
 Summary: DMZ Firewall
 License: GPLv3
