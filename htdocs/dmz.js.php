@@ -56,8 +56,6 @@ function check_protocol_port() {
 $(document).ready(function() {
 
     if ($(location).attr('href').match('.*\/incoming|pinhole\/.*$') != null) {
-        $('#port').css('width', '50');
-
         check_protocol_port();
         $('#all').change(function(event) {
             check_protocol_port();
