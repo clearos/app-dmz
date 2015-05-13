@@ -104,7 +104,7 @@ class Pinhole extends ClearOS_Controller
 
         $this->form_validation->set_policy('nickname', 'dmz/Dmz', 'validate_name', TRUE);
         $this->form_validation->set_policy('ip_address', 'dmz/Dmz', 'validate_ip', TRUE);
-        if ($this->input->post('all') != 'on') {
+        if (!$this->input->post('all')) {
             $this->form_validation->set_policy('protocol', 'dmz/Dmz', 'validate_protocol', TRUE);
             $this->form_validation->set_policy('port', 'dmz/Dmz', 'validate_port', TRUE);
         }
@@ -118,7 +118,7 @@ class Pinhole extends ClearOS_Controller
                 $my_protocol = $this->input->post('protocol');
                 $my_port = $this->input->post('port');
 
-                if ($this->input->post('all') == 'on') {
+                if ($this->input->post('all')) {
                     $my_protocol = Dmz::PROTOCOL_ALL;
                     $my_port = Dmz::CONSTANT_ALL_PORTS;
                 }

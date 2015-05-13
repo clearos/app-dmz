@@ -1,0 +1,4 @@
+#!/bin/sh
+
+logger -p local6.notice -t installer "app-dmz-core - removing DMZ rules on un-install"
+/usr/clearos/apps/dmz/deploy/remove-dmz-rules
