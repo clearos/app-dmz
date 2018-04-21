@@ -1,26 +1,29 @@
 
 Name: app-dmz
 Epoch: 1
-Version: 2.1.6
+Version: 2.5.0
 Release: 1%{dist}
 Summary: DMZ Firewall
 License: GPLv3
-Group: ClearOS/Apps
+Group: Applications/Apps
+Packager: ClearFoundation
+Vendor: ClearFoundation
 Source: %{name}-%{version}.tar.gz
 Buildarch: noarch
 Requires: %{name}-core = 1:%{version}-%{release}
 Requires: app-base
+Requires: app-firewall
 Requires: app-network
 
 %description
 The DMZ app provides firewall tools for systems in the de-militarized zone.  Isolating high risk external services such as web, e-mail and VoIP system can improve the security of your network.
 
 %package core
-Summary: DMZ Firewall - Core
+Summary: DMZ Firewall - API
 License: LGPLv3
-Group: ClearOS/Libraries
+Group: Applications/API
 Requires: app-base-core
-Requires: app-firewall >= 1:1.5.19
+Requires: app-firewall-core >= 1:1.5.19
 Requires: app-network-core
 
 %description core
@@ -73,6 +76,7 @@ exit 0
 %files core
 %defattr(-,root,root)
 %exclude /usr/clearos/apps/dmz/packaging
+%exclude /usr/clearos/apps/dmz/unify.json
 %dir /usr/clearos/apps/dmz
 /usr/clearos/apps/dmz/deploy
 /usr/clearos/apps/dmz/language
